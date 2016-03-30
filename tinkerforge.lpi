@@ -67,16 +67,24 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
       <OtherUnitFiles Value="tinkerforge"/>
-      <UnitOutputDirectory Value="..\..\output\$(TargetCPU)-$(TargetOS)\scriptplugins"/>
+      <UnitOutputDirectory Value="..\..\..\..\output\$(TargetCPU)-$(TargetOS)\scriptplugins"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
         <CStyleOperator Value="False"/>
+        <IncludeAssertionCode Value="True"/>
       </SyntaxOptions>
     </Parsing>
+    <CodeGeneration>
+      <Checks>
+        <IOChecks Value="True"/>
+        <RangeChecks Value="True"/>
+        <StackChecks Value="True"/>
+      </Checks>
+      <VerifyObjMethodCallValidity Value="True"/>
+    </CodeGeneration>
     <Linking>
       <Debugging>
-        <TrashVariables Value="True"/>
         <UseExternalDbgSyms Value="True"/>
       </Debugging>
       <Options>

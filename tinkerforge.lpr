@@ -43,7 +43,7 @@ end;
 procedure TStation.ipconDisconnected(sender: TIPConnection;
   const disconnectReason: byte);
 begin
-  writeln('puff');
+  ipcon.Enumerate;
 end;
 
 procedure TStation.ipconEnumerate(sender: TIPConnection; const uid: string;
@@ -101,7 +101,10 @@ begin
 end;
 procedure TStation.ConnectedCB(sender: TIPConnection;
   const connectedReason: byte);
+var
+  acon: Byte;
 begin
+  acon := connectedReason;
 end;
 function TfConnect(Host : PChar;Port : Integer) : Boolean;stdcall;
 begin
@@ -125,7 +128,7 @@ end;
 function TfEnumerate : Integer;stdcall;
 begin
   if Station=nil then exit;
-  sleep(10);
+  sleep(30);
   Result :=Station.Devices.Count;
 end;
 procedure TfLCDBackLightOn;stdcall;
@@ -227,6 +230,7 @@ begin
             Result := IsButtonPressed(Button);
       end;
   except
+    Result := False;
   end;
 end;
 function TfGetVoltageById(id : Integer) : LongInt;stdcall;
@@ -238,18 +242,22 @@ begin
   a := 0;
   if Station=nil then exit;
   if not Station.ipcon.IsConnected then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          if a=id then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetVoltage;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            if a=id then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetVoltage;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfGetVoltage(position : pchar) : LongInt;stdcall;
 var
@@ -265,19 +273,23 @@ begin
   Result := -1;
   if Station=nil then exit;
   if not Station.ipcon.IsConnected then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-          if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetVoltage;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetVoltage;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfGetCurrentById(id : Integer) : LongInt;stdcall;
 var
@@ -287,18 +299,22 @@ begin
   Result := -1;
   a := 0;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          if a=id then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetCurrent;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            if a=id then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetCurrent;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfGetCurrent(position : pchar) : LongInt;stdcall;
 var
@@ -313,19 +329,23 @@ var
 begin
   Result := -1;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-          if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetCurrent;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetCurrent;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfGetPowerById(id : Integer) : LongInt;stdcall;
 var
@@ -335,18 +355,22 @@ begin
   Result := -1;
   a := 0;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          if a=id then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetPower;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            if a=id then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetPower;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfGetPower(position : pchar) : LongInt;stdcall;
 var
@@ -361,19 +385,23 @@ var
 begin
   Result := -1;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
-        begin
-          TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-          if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
-            begin
-              Result := TBrickletVoltageCurrent(Station.Devices[i]).GetPower;
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                Result := TBrickletVoltageCurrent(Station.Devices[i]).GetPower;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
 end;
 function TfSetRelais(Position : pchar;Relais : Integer;SwitchOn : Boolean) : Boolean;stdcall;
 var
@@ -390,45 +418,46 @@ var
 begin
   Result := False;
   if Station=nil then exit;
+  try
   for i := 0 to Station.Devices.Count-1 do
-    //begin
-      //if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
+    begin
+      TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+      if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
         begin
-          TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-          if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+          if TObject(Station.Devices[i]) is TBrickletDualRelay then
             begin
-              if TObject(Station.Devices[i]) is TBrickletDualRelay then
+              Result := True;
+              TBrickletDualRelay(Station.Devices[i]).GetState(aRelais,bRelais);
+              case Relais of
+              0:TBrickletDualRelay(Station.Devices[i]).SetState(SwitchOn,bRelais);
+              1:TBrickletDualRelay(Station.Devices[i]).SetState(aRelais,SwitchOn);
+              else Result := False;
+              end;
+            end
+          else if TObject(Station.Devices[i]) is TBrickletIndustrialQuadRelay then
+            begin
+              Result := True;
+              sRelais := TBrickletIndustrialQuadRelay(Station.Devices[i]).GetValue;
+              if SwitchOn then
                 begin
-                  Result := True;
-                  TBrickletDualRelay(Station.Devices[i]).GetState(aRelais,bRelais);
-                  case Relais of
-                  0:TBrickletDualRelay(Station.Devices[i]).SetState(SwitchOn,bRelais);
-                  1:TBrickletDualRelay(Station.Devices[i]).SetState(aRelais,SwitchOn);
-                  else Result := False;
-                  end;
+                  if sRelais and (1 shl Relais) <> (1 shl Relais) then
+                    sRelais:=sRelais or (1 shl Relais)
                 end
-              else if TObject(Station.Devices[i]) is TBrickletIndustrialQuadRelay then
+              else
                 begin
-                  Result := True;
-                  sRelais := TBrickletIndustrialQuadRelay(Station.Devices[i]).GetValue;
-                  if SwitchOn then
-                    begin
-                      if sRelais and (1 shl Relais) <> (1 shl Relais) then
-                        sRelais:=sRelais or (1 shl Relais)
-                    end
-                  else
-                    begin
-                      if sRelais and (1 shl Relais) = (1 shl Relais) then
-                        sRelais:=sRelais xor (1 shl Relais);
-                    end;
-                  Result := sRelais<=$F;
-                  if Result then
-                    TBrickletIndustrialQuadRelay(Station.Devices[i]).SetValue(sRelais);
+                  if sRelais and (1 shl Relais) = (1 shl Relais) then
+                    sRelais:=sRelais xor (1 shl Relais);
                 end;
-              exit;
+              Result := sRelais<=$F;
+              if Result then
+                TBrickletIndustrialQuadRelay(Station.Devices[i]).SetValue(sRelais);
             end;
+          exit;
         end;
-    //end;
+    end;
+  except
+    Result := False;
+  end;
 end;
 function TfGetColorById(id : Integer) : Cardinal;stdcall;
 var
@@ -440,26 +469,30 @@ var
   c: word;
   rgbc: array[0..3] of Byte;
 begin
-  Result := -1;
+  Result := 0;
   a := 0;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletColor then
-        begin
-          if a=id then
-            begin
-              TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
-              rgbc[0] := r div 256;
-              rgbc[1] := g div 256;
-              rgbc[2] := b div 256;
-              rgbc[3] := c div 256;
-              Result := dword(rgbc);
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletColor then
+          begin
+            if a=id then
+              begin
+                TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
+                rgbc[0] := r div 256;
+                rgbc[1] := g div 256;
+                rgbc[2] := b div 256;
+                rgbc[3] := c div 256;
+                Result := dword(rgbc);
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := 0;
+  end;
 end;
 function TfGetColor(position : pchar) : Cardinal;stdcall;
 var
@@ -477,26 +510,30 @@ var
   c: word;
   rgbc: array[0..3] of Byte;
 begin
-  Result := -1;
+  Result := 0;
   if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletColor then
-        begin
-          TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-          if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
-            begin
-              TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
-              rgbc[0] := r div 256;
-              rgbc[1] := g div 256;
-              rgbc[2] := b div 256;
-              rgbc[3] := c div 256;
-              Result := dword(rgbc);
-              exit;
-            end;
-          inc(a);
-        end;
-    end;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletColor then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
+                rgbc[0] := r div 256;
+                rgbc[1] := g div 256;
+                rgbc[2] := b div 256;
+                rgbc[3] := c div 256;
+                Result := dword(rgbc);
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := 0;
+  end;
 end;
 function TfGetDeviceList : pchar;stdcall;
 begin
