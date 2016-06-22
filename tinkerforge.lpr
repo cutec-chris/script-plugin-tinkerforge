@@ -6,7 +6,7 @@ library tinkerforge;
 uses
   Classes,sysutils, IPConnection, Device, BrickletLCD20x4, BrickletLCD16x2,
   BrickletVoltageCurrent,BrickletIndustrialQuadRelay,BrickletDualRelay,process,
-  Utils,BrickletColor;
+  Utils,BrickletColor,BrickServo;
 type
   TStation = class
     procedure ipconConnected(sender: TIPConnection; const connectReason: byte);
@@ -81,6 +81,10 @@ begin
       end;
       if (deviceIdentifier = BRICKLET_COLOR_DEVICE_IDENTIFIER) then begin
         Dev := TBrickletColor.Create(UID, ipcon);
+        Devices.Add(Dev);
+      end;
+      if (deviceIdentifier = BRICK_SERVO_DEVICE_IDENTIFIER) then begin
+        Dev := TBrickServo.Create(UID, ipcon);
         Devices.Add(Dev);
       end;
     end;
@@ -535,6 +539,199 @@ begin
     Result := 0;
   end;
 end;
+function TfServoEnable(const servoNum: byte) : Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).Enable(servoNum);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoDisable(const servoNum: byte) : Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).Disable(servoNum);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoIsEnabled(const servoNum: byte) : Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            Result := TBrickServo(Station.Devices[i]).IsEnabled(servoNum);
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoSetPosition(const servoNum: byte; const position: smallint) :Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).SetPosition(servoNum,position);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoGetPosition(const servoNum: byte): Integer;stdcall;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            Result := TBrickServo(Station.Devices[i]).GetPosition(servoNum);
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoGetCurrent(const servoNum: byte): LongInt;stdcall;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            Result := TBrickServo(Station.Devices[i]).GetServoCurrent(servoNum);
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoSetParameter(const servoNum: byte; const velocity, period :word) : Integer;stdcall;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).SetVelocity(servoNum,velocity);
+            TBrickServo(Station.Devices[i]).SetPeriod(servoNum,period);
+            Result := 0;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoSetPulseWidth(const servoNum: byte; const min: word; const max: word) :Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).SetPulseWidth(servoNum,min,max);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoSetOutputVoltage(const voltage: word):Integer;stdcall;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            if TBrickServo(Station.Devices[i]).GetExternalInputVoltage < (voltage+1000) then //InputVoltage must be 1000mV bigger than OutputVoltage
+              begin
+                Result := 2;
+                exit;
+              end;
+            TBrickServo(Station.Devices[i]).SetOutputVoltage(voltage);
+            Result := 0;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfServoSetDegree(const servoNum: byte; const min: Integer; const max: Integer) :Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickServo then
+          begin
+            TBrickServo(Station.Devices[i]).SetDegree(servoNum,min,max);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
 function TfGetDeviceList : pchar;stdcall;
 begin
   Result := pchar(DeviceList);
@@ -583,6 +780,16 @@ begin
 
        +#10+'function TfSetRelais(Position : pchar;Relais : Integer;SwitchOn : Boolean) : Boolean;stdcall;'
 
+       +#10+'function TfServoEnable(const servoNum: byte) : Boolean;stdcall;'
+       +#10+'function TfServoDisable(const servoNum: byte) : Boolean;stdcall;'
+       +#10+'function TfServoIsEnabled(const servoNum: byte) : Boolean;stdcall;'
+       +#10+'function TfServoSetPosition(const servoNum: byte; const position: Integer) :Boolean;stdcall;'
+       +#10+'function TfServoGetPosition(const servoNum: byte): Integer;stdcall;'
+       +#10+'function TfServoSetParameter(const servoNum: byte; const velocity, period: word) : Integer;stdcall;'
+       +#10+'function TfServoGetCurrent(const servoNum: byte): LongInt;stdcall;'
+       +#10+'function TfServoSetDegree(const servoNum: byte; const min: Integer; const max: Integer):Boolean;stdcall;'
+       +#10+'function TfServoSetPulseWidth(const servoNum: byte; const min: word; const max: word) :Boolean;stdcall;'
+       +#10+'function TfServoSetOutputVoltage(const voltage: word):Integer;stdcall;'
             ;
 end;
 
@@ -609,6 +816,18 @@ exports
   TfGetColorById,
 
   TfSetRelais,
+
+  TfServoEnable,
+  TfServoDisable,
+  TfServoIsEnabled,
+  TfServoSetPosition,
+  TfServoGetPosition,
+  TfServoSetParameter,
+  TfServoGetCurrent,
+  TfServoSetDegree,
+
+  TfServoSetPulseWidth,
+  TfServoSetOutputVoltage,
 
   ScriptCleanup,
   ScriptTool,
