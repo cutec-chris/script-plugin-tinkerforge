@@ -4,39 +4,41 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="23">
+    <Units Count="24">
       <Unit0>
         <Filename Value="tinkerforge.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="56" Y="17"/>
-        <UsageCount Value="43"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="586"/>
+        <CursorPos X="73" Y="628"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="tinkerforge\IPConnection.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="1177"/>
         <CursorPos X="20" Y="1068"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="tinkerforge\Device.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="219"/>
         <CursorPos X="3" Y="233"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="tinkerforge\BrickletLCD20x4.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="304"/>
         <CursorPos Y="329"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -45,7 +47,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="103"/>
         <CursorPos X="14" Y="119"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="47"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\..\..\tcscmd_git\src\tcsbus\utcsbus.pas"/>
@@ -129,11 +131,10 @@
       <Unit16>
         <Filename Value="C:\Programme\lazarus\components\synedit\synedittexttrimmer.pas"/>
         <UnitName Value="SynEditTextTrimmer"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1248"/>
         <CursorPos X="40" Y="1271"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit16>
       <Unit17>
         <Filename Value="C:\Programme\lazarus\fpc\2.6.4\source\rtl\inc\socketsh.inc"/>
@@ -157,10 +158,10 @@
       </Unit19>
       <Unit20>
         <Filename Value="..\..\..\..\..\general\pascal_script\genpascalscript.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="350"/>
         <CursorPos Y="369"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit20>
       <Unit21>
@@ -169,143 +170,148 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uScriptEditor"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="676"/>
+        <EditorIndex Value="3"/>
         <CursorPos Y="700"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit21>
       <Unit22>
         <Filename Value="C:\Programme\lazarus\fpc\2.6.4\source\rtl\morphos\graphics.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="2180"/>
         <CursorPos X="40" Y="2199"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit22>
+      <Unit23>
+        <Filename Value="tinkerforge\BrickServo.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="168"/>
+        <CursorPos X="15" Y="188"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit23>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="tinkerforge\IPConnection.pas"/>
-        <Caret Line="463" Column="16" TopLine="432"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="598" Column="40" TopLine="572"/>
       </Position1>
       <Position2>
-        <Filename Value="tinkerforge\IPConnection.pas"/>
-        <Caret Line="787" Column="72" TopLine="772"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="607" Column="54" TopLine="572"/>
       </Position2>
       <Position3>
         <Filename Value="tinkerforge.lpr"/>
-        <Caret Line="591" Column="10" TopLine="582"/>
+        <Caret Line="609" Column="62" TopLine="600"/>
       </Position3>
       <Position4>
         <Filename Value="tinkerforge.lpr"/>
-        <Caret Line="31" Column="16" TopLine="8"/>
+        <Caret Line="617" Column="40" TopLine="599"/>
       </Position4>
       <Position5>
         <Filename Value="tinkerforge.lpr"/>
-        <Caret Line="17" Column="56"/>
+        <Caret Line="626" Column="54" TopLine="599"/>
       </Position5>
       <Position6>
-        <Filename Value="..\..\..\..\..\general\pascal_script\genpascalscript.pas"/>
-        <Caret Line="369" TopLine="350"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="628" Column="72" TopLine="599"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="530" Column="17" TopLine="511"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="635" Column="39" TopLine="623"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="554" Column="32" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="644" Column="54" TopLine="623"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="556" Column="20" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="646" Column="76" TopLine="623"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="557" Column="20" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="653" Column="41" TopLine="638"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="558" Column="20" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="662" Column="54" TopLine="638"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="559" Column="33" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="664" Column="62" TopLine="638"/>
       </Position12>
       <Position13>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="560" Column="20" TopLine="538"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="665" Column="60" TopLine="638"/>
       </Position13>
       <Position14>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="561" Column="14" TopLine="541"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="673" Column="42" TopLine="662"/>
       </Position14>
       <Position15>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="562" Column="16" TopLine="548"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="682" Column="54" TopLine="662"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="569" Column="20" TopLine="560"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="684" Column="64" TopLine="662"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="573" Column="20" TopLine="560"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="692" Column="17" TopLine="686"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="575" Column="21" TopLine="560"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="701" Column="54" TopLine="686"/>
       </Position18>
       <Position19>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="591" Column="28" TopLine="573"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="703" Column="27" TopLine="686"/>
       </Position19>
       <Position20>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="687" Column="28" TopLine="656"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="708" Column="24" TopLine="686"/>
       </Position20>
       <Position21>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="692" Column="13" TopLine="684"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="716" Column="38" TopLine="698"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="697" Column="21" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="725" Column="54" TopLine="698"/>
       </Position22>
       <Position23>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="702" Column="58" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="727" Column="60" TopLine="698"/>
       </Position23>
       <Position24>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="703" Column="28" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="783" Column="48" TopLine="762"/>
       </Position24>
       <Position25>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="697" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="784" Column="49" TopLine="762"/>
       </Position25>
       <Position26>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="710" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="785" Column="51" TopLine="762"/>
       </Position26>
       <Position27>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="711" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="786" Column="53" TopLine="762"/>
       </Position27>
       <Position28>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="712" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="787" Column="30" TopLine="762"/>
       </Position28>
       <Position29>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="697" TopLine="686"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="830" Column="13" TopLine="794"/>
       </Position29>
       <Position30>
-        <Filename Value="..\..\..\base\base_scripts\uscripteditor.pas"/>
-        <Caret Line="15" Column="91"/>
+        <Filename Value="tinkerforge.lpr"/>
+        <Caret Line="708" Column="55" TopLine="679"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

@@ -625,7 +625,7 @@ begin
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
           begin
-            Result := TBrickServo(Station.Devices[i]).GetPosition(servoNum);
+            Result := TBrickServo(Station.Devices[i]).GetCurrentPosition(servoNum);
             exit;
           end;
       end;
