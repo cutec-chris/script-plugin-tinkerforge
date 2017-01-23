@@ -6,7 +6,7 @@ library tinkerforge;
 uses
   Classes,sysutils, IPConnection, Device, BrickletLCD20x4, BrickletLCD16x2,
   BrickletVoltageCurrent,BrickletIndustrialQuadRelay,BrickletDualRelay,process,
-  Utils,BrickletColor,BrickServo;
+  Utils,BrickletColor,BrickServo,BrickletIO16;
 type
   TStation = class
     procedure ipconConnected(sender: TIPConnection; const connectReason: byte);
@@ -85,6 +85,10 @@ begin
       end;
       if (deviceIdentifier = BRICK_SERVO_DEVICE_IDENTIFIER) then begin
         Dev := TBrickServo.Create(UID, ipcon);
+        Devices.Add(Dev);
+      end;
+      if (deviceIdentifier = BRICKLET_IO16_DEVICE_IDENTIFIER) then begin
+        Dev := TBrickletIO16.Create(UID, ipcon);
         Devices.Add(Dev);
       end;
     end;
@@ -732,6 +736,99 @@ begin
   except
   end;
 end;
+function TfIO16SetPort(const port: char; const valueMask: byte) :Boolean ;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletIO16 then
+          begin
+            TBrickletIO16(Station.Devices[i]).SetPort(port,valueMask);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfIO16GetPort(const port: char): byte;stdcall;
+var
+  i: Integer;
+begin
+  Result := 0;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletIO16 then
+          begin
+            Result := TBrickletIO16(Station.Devices[i]).GetPort(port);
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfIO16SetPortConfiguration(const port: char; const selectionMask: byte; const direction: char; const value: boolean) :Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletIO16 then
+          begin
+            TBrickletIO16(Station.Devices[i]).SetPortConfiguration(port,selectionMask,direction,value);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfIO16GetPortConfiguration(const port: char; out directionMask: byte; out valueMask: byte) :Boolean;stdcall;
+var
+  i: Integer;
+begin
+  Result := False;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletIO16 then
+          begin
+            TBrickletIO16(Station.Devices[i]).GetPortConfiguration(port,directionMask,valueMask);
+            Result := True;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
+function TfIO16GetDebouncePeriod: longword; stdcall;
+var
+  i: Integer;
+begin
+  Result := 0;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletIO16 then
+          begin
+            Result := TBrickletIO16(Station.Devices[i]).GetDebouncePeriod;
+            exit;
+          end;
+      end;
+  except
+  end;
+end;
 function TfGetDeviceList : pchar;stdcall;
 begin
   Result := pchar(DeviceList);
@@ -790,6 +887,12 @@ begin
        +#10+'function TfServoSetDegree(const servoNum: byte; const min: Integer; const max: Integer):Boolean;stdcall;'
        +#10+'function TfServoSetPulseWidth(const servoNum: byte; const min: word; const max: word) :Boolean;stdcall;'
        +#10+'function TfServoSetOutputVoltage(const voltage: word):Integer;stdcall;'
+
+       +#10+'function TfIO16SetPort(const port: char; const valueMask: byte):Boolean;stdcall;'
+       +#10+'function TfIO16GetPort(const port: char):byte;stdcall;'
+       +#10+'function TfIO16SetPortConfiguration(const port: char; const selectionMask: byte; const direction: char; const value: boolean):Boolean;stdcall;'
+       +#10+'function TfIO16GetPortConfiguration(const port: char; out directionMask: byte; out valueMask: byte):Boolean;stdcall;'
+       +#10+'function TfIO16GetDebouncePeriod: longword;stdcall;'
             ;
 end;
 
@@ -828,6 +931,12 @@ exports
 
   TfServoSetPulseWidth,
   TfServoSetOutputVoltage,
+
+  TfIO16SetPort,
+  TfIO16GetPort,
+  TfIO16SetPortConfiguration,
+  TfIO16GetPortConfiguration,
+  TfIO16GetDebouncePeriod,
 
   ScriptCleanup,
   ScriptTool,
