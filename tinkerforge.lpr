@@ -87,6 +87,10 @@ begin
         Dev := TBrickServo.Create(UID, ipcon);
         Devices.Add(Dev);
       end;
+      if (deviceIdentifier = BRICKLET_IO16_DEVICE_IDENTIFIER) then begin
+        Dev := TBrickletIO16.Create(UID, ipcon);
+        Devices.Add(Dev);
+      end;
     end;
 end;
 constructor TStation.Create;
