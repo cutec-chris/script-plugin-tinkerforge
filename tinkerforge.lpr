@@ -1006,6 +1006,9 @@ exports
   TfIO16GetPortConfiguration,
   TfIO16GetDebouncePeriod,
 
+  TfGetSoundIntensity,
+  TfGetSoundIntensityById,
+
   ScriptCleanup,
   ScriptTool,
   ScriptDefinition;
