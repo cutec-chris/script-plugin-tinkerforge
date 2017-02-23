@@ -6,7 +6,7 @@ library tinkerforge;
 uses
   Classes,sysutils, IPConnection, Device, BrickletLCD20x4, BrickletLCD16x2,
   BrickletVoltageCurrent,BrickletIndustrialQuadRelay,BrickletDualRelay,process,
-  Utils,BrickletColor,BrickServo,BrickletIO16;
+  Utils,BrickletColor,BrickServo,BrickletIO16,BrickletSoundIntensity;
 type
   TStation = class
     procedure ipconConnected(sender: TIPConnection; const connectReason: byte);
@@ -89,6 +89,10 @@ begin
       end;
       if (deviceIdentifier = BRICKLET_IO16_DEVICE_IDENTIFIER) then begin
         Dev := TBrickletIO16.Create(UID, ipcon);
+        Devices.Add(Dev);
+      end;
+      if (deviceIdentifier = BRICKLET_SOUND_INTENSITY_DEVICE_IDENTIFIER) then begin
+        Dev := TBrickletSoundIntensity.Create(UID, ipcon);
         Devices.Add(Dev);
       end;
     end;
@@ -829,6 +833,67 @@ begin
   except
   end;
 end;
+
+function TfGetSoundIntensity(Position : pchar) : LongInt;stdcall;
+var
+  a: Integer;
+  i: Integer;
+  aDID: word;
+  aFWV: TVersionNumber;
+  aHWV: TVersionNumber;
+  aPosition: char;
+  aConUID: string;
+  aUid: string;
+begin
+  Result := -1;
+  if Station=nil then exit;
+  if not Station.ipcon.IsConnected then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletSoundIntensity then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                Result := TBrickletSoundIntensity(Station.Devices[i]).GetIntensity;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
+end;
+
+function TfGetSoundIntensityById(id : Integer) : LongInt;stdcall;
+var
+  a: Integer;
+  i: Integer;
+begin
+  Result := -1;
+  a := 0;
+  if Station=nil then exit;
+  if not Station.ipcon.IsConnected then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletSoundIntensity then
+          begin
+            if a=id then
+              begin
+                Result := TBrickletSoundIntensity(Station.Devices[i]).GetIntensity;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := -2;
+  end;
+end;
+
 function TfGetDeviceList : pchar;stdcall;
 begin
   Result := pchar(DeviceList);
@@ -893,6 +958,9 @@ begin
        +#10+'function TfIO16SetPortConfiguration(const port: char; const selectionMask: byte; const direction: char; const value: boolean):Boolean;stdcall;'
        +#10+'function TfIO16GetPortConfiguration(const port: char; out directionMask: byte; out valueMask: byte):Boolean;stdcall;'
        +#10+'function TfIO16GetDebouncePeriod: longword;stdcall;'
+
+       +#10+'function TfGetSoundIntensity(Position : pchar) : LongInt;stdcall;'
+       +#10+'function TfGetSoundIntensityById(id : Integer) : LongInt;stdcall;'
             ;
 end;
 
