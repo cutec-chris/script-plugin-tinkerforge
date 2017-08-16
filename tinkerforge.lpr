@@ -121,9 +121,9 @@ end;
 function TfConnect(Host : PChar;Port : Integer) : Boolean;stdcall;
 begin
   DeviceList := '';
-  if not Assigned(Station) then
-    Station := TStation.Create;
   try
+    if not Assigned(Station) then
+      Station := TStation.Create;
     Station.Conn.Connect(Host,Port);
     Station.Conn.Enumerate;
     result := Station.Conn.IsConnected;
@@ -134,60 +134,74 @@ begin
 end;
 function TfDisconnect : Boolean;stdcall;
 begin
-  Result := True;
-  FreeAndNil(Station);
+  try
+    Result := True;
+    FreeAndNil(Station);
+  except
+    Result := False;
+  end;
 end;
 function TfEnumerate : Integer;stdcall;
 begin
-  if Station=nil then exit;
-  sleep(30);
-  Result :=Station.Devices.Count;
+  try
+    if Station=nil then exit;
+    sleep(30);
+    Result :=Station.Devices.Count;
+  except
+    Result := -1;
+  end;
 end;
 procedure TfLCDBackLightOn;stdcall;
 var
   i: Integer;
 begin
-  if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
-        with TBrickletLCD16x2(Station.Devices[i]) do
-          begin
-            BacklightOn;
-          end;
-      if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
-        with TBrickletLCD20x4(Station.Devices[i]) do
-          begin
-            BacklightOn;
-          end;
-    end;
+  try
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
+          with TBrickletLCD16x2(Station.Devices[i]) do
+            begin
+              BacklightOn;
+            end;
+        if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
+          with TBrickletLCD20x4(Station.Devices[i]) do
+            begin
+              BacklightOn;
+            end;
+      end;
+  except
+  end;
 end;
 procedure TfLCDBackLightOff;stdcall;
 var
   i: Integer;
 begin
-  if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
-        with TBrickletLCD16x2(Station.Devices[i]) do
-          begin
-            BacklightOff;
-          end;
-      if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
-        with TBrickletLCD20x4(Station.Devices[i]) do
-          begin
-            BacklightOff;
-          end;
-    end;
+  try
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
+          with TBrickletLCD16x2(Station.Devices[i]) do
+            begin
+              BacklightOff;
+            end;
+        if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
+          with TBrickletLCD20x4(Station.Devices[i]) do
+            begin
+              BacklightOff;
+            end;
+      end;
+  except
+  end;
 end;
 procedure TfLCDWrite(x,y : Integer;text : string);stdcall;
 var
   i: Integer;
 begin
-  if Station=nil then exit;
-  if not Station.ipcon.IsConnected then exit;
   try
+    if Station=nil then exit;
+    if not Station.ipcon.IsConnected then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
@@ -208,28 +222,31 @@ procedure TfLCDClear;stdcall;
 var
   i: Integer;
 begin
-  if Station=nil then exit;
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
-        with TBrickletLCD16x2(Station.Devices[i]) do
-          begin
-            ClearDisplay;
-          end;
-      if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
-        with TBrickletLCD20x4(Station.Devices[i]) do
-          begin
-            ClearDisplay;
-          end;
-    end;
+  try
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletLCD16x2 then
+          with TBrickletLCD16x2(Station.Devices[i]) do
+            begin
+              ClearDisplay;
+            end;
+        if TDevice(Station.Devices[i]) is TBrickletLCD20x4 then
+          with TBrickletLCD20x4(Station.Devices[i]) do
+            begin
+              ClearDisplay;
+            end;
+      end;
+  except
+  end;
 end;
 function TfLCDButtonPressed(Button : byte) : Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     if not Station.ipcon.IsConnected then exit;
     if Button>3 then exit;
     for i := 0 to Station.Devices.Count-1 do
@@ -250,11 +267,11 @@ var
   a: Integer;
   i: Integer;
 begin
-  Result := -1;
-  a := 0;
-  if Station=nil then exit;
-  if not Station.ipcon.IsConnected then exit;
   try
+    Result := -1;
+    a := 0;
+    if Station=nil then exit;
+    if not Station.ipcon.IsConnected then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -282,10 +299,10 @@ var
   aConUID: string;
   aUid: string;
 begin
-  Result := -1;
-  if Station=nil then exit;
-  if not Station.ipcon.IsConnected then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
+    if not Station.ipcon.IsConnected then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -308,10 +325,10 @@ var
   a: Integer;
   i: Integer;
 begin
-  Result := -1;
-  a := 0;
-  if Station=nil then exit;
   try
+    Result := -1;
+    a := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -339,9 +356,9 @@ var
   aConUID: string;
   aUid: string;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -364,10 +381,10 @@ var
   a: Integer;
   i: Integer;
 begin
-  Result := -1;
-  a := 0;
-  if Station=nil then exit;
   try
+    Result := -1;
+    a := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -395,9 +412,9 @@ var
   aConUID: string;
   aUid: string;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletVoltageCurrent then
@@ -428,45 +445,45 @@ var
   sRelais: Word;
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
-  for i := 0 to Station.Devices.Count-1 do
-    begin
-      TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
-      if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
-        begin
-          if TObject(Station.Devices[i]) is TBrickletDualRelay then
-            begin
-              Result := True;
-              TBrickletDualRelay(Station.Devices[i]).GetState(aRelais,bRelais);
-              case Relais of
-              0:TBrickletDualRelay(Station.Devices[i]).SetState(SwitchOn,bRelais);
-              1:TBrickletDualRelay(Station.Devices[i]).SetState(aRelais,SwitchOn);
-              else Result := False;
-              end;
-            end
-          else if TObject(Station.Devices[i]) is TBrickletIndustrialQuadRelay then
-            begin
-              Result := True;
-              sRelais := TBrickletIndustrialQuadRelay(Station.Devices[i]).GetValue;
-              if SwitchOn then
-                begin
-                  if sRelais and (1 shl Relais) <> (1 shl Relais) then
-                    sRelais:=sRelais or (1 shl Relais)
-                end
-              else
-                begin
-                  if sRelais and (1 shl Relais) = (1 shl Relais) then
-                    sRelais:=sRelais xor (1 shl Relais);
+    Result := False;
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+        if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+          begin
+            if TObject(Station.Devices[i]) is TBrickletDualRelay then
+              begin
+                Result := True;
+                TBrickletDualRelay(Station.Devices[i]).GetState(aRelais,bRelais);
+                case Relais of
+                0:TBrickletDualRelay(Station.Devices[i]).SetState(SwitchOn,bRelais);
+                1:TBrickletDualRelay(Station.Devices[i]).SetState(aRelais,SwitchOn);
+                else Result := False;
                 end;
-              Result := sRelais<=$F;
-              if Result then
-                TBrickletIndustrialQuadRelay(Station.Devices[i]).SetValue(sRelais);
-            end;
-          exit;
-        end;
-    end;
+              end
+            else if TObject(Station.Devices[i]) is TBrickletIndustrialQuadRelay then
+              begin
+                Result := True;
+                sRelais := TBrickletIndustrialQuadRelay(Station.Devices[i]).GetValue;
+                if SwitchOn then
+                  begin
+                    if sRelais and (1 shl Relais) <> (1 shl Relais) then
+                      sRelais:=sRelais or (1 shl Relais)
+                  end
+                else
+                  begin
+                    if sRelais and (1 shl Relais) = (1 shl Relais) then
+                      sRelais:=sRelais xor (1 shl Relais);
+                  end;
+                Result := sRelais<=$F;
+                if Result then
+                  TBrickletIndustrialQuadRelay(Station.Devices[i]).SetValue(sRelais);
+              end;
+            exit;
+          end;
+      end;
   except
     Result := False;
   end;
@@ -481,10 +498,10 @@ var
   c: word;
   rgbc: array[0..3] of Byte;
 begin
-  Result := 0;
-  a := 0;
-  if Station=nil then exit;
   try
+    Result := 0;
+    a := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletColor then
@@ -522,9 +539,9 @@ var
   c: word;
   rgbc: array[0..3] of Byte;
 begin
-  Result := 0;
-  if Station=nil then exit;
   try
+    Result := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletColor then
@@ -551,9 +568,9 @@ function TfServoEnable(const servoNum: byte) : Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -564,15 +581,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfServoDisable(const servoNum: byte) : Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -583,15 +601,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfServoIsEnabled(const servoNum: byte) : Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -601,15 +620,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfServoSetPosition(const servoNum: byte; const position: smallint) :Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -620,15 +640,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfServoGetPosition(const servoNum: byte): Integer;stdcall;
 var
   i: Integer;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -638,15 +659,16 @@ begin
           end;
       end;
   except
+    Result := -2;
   end;
 end;
 function TfServoGetCurrent(const servoNum: byte): LongInt;stdcall;
 var
   i: Integer;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -656,15 +678,16 @@ begin
           end;
       end;
   except
+    Result := -2;
   end;
 end;
 function TfServoSetParameter(const servoNum: byte; const velocity, period :word) : Integer;stdcall;
 var
   i: Integer;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -676,15 +699,16 @@ begin
           end;
       end;
   except
+    Result := -2;
   end;
 end;
 function TfServoSetPulseWidth(const servoNum: byte; const min: word; const max: word) :Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -695,15 +719,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfServoSetOutputVoltage(const voltage: word):Integer;stdcall;
 var
   i: Integer;
 begin
-  Result := -1;
-  if Station=nil then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -719,15 +744,16 @@ begin
           end;
       end;
   except
+    Result := -2;
   end;
 end;
 function TfServoSetDegree(const servoNum: byte; const min: Integer; const max: Integer) :Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickServo then
@@ -738,15 +764,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfIO16SetPort(const port: char; const valueMask: byte) :Boolean ;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletIO16 then
@@ -757,15 +784,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfIO16GetPort(const port: char): byte;stdcall;
 var
   i: Integer;
 begin
-  Result := 0;
-  if Station=nil then exit;
   try
+    Result := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletIO16 then
@@ -775,15 +803,16 @@ begin
           end;
       end;
   except
+    Result := 0;
   end;
 end;
 function TfIO16SetPortConfiguration(const port: char; const selectionMask: byte; const direction: char; const value: boolean) :Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletIO16 then
@@ -794,15 +823,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfIO16GetPortConfiguration(const port: char; out directionMask: byte; out valueMask: byte) :Boolean;stdcall;
 var
   i: Integer;
 begin
-  Result := False;
-  if Station=nil then exit;
   try
+    Result := False;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletIO16 then
@@ -813,15 +843,16 @@ begin
           end;
       end;
   except
+    Result := False;
   end;
 end;
 function TfIO16GetDebouncePeriod: longword; stdcall;
 var
   i: Integer;
 begin
-  Result := 0;
-  if Station=nil then exit;
   try
+    Result := 0;
+    if Station=nil then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletIO16 then
@@ -831,6 +862,7 @@ begin
           end;
       end;
   except
+    Result := 0;
   end;
 end;
 
@@ -845,10 +877,10 @@ var
   aConUID: string;
   aUid: string;
 begin
-  Result := -1;
-  if Station=nil then exit;
-  if not Station.ipcon.IsConnected then exit;
   try
+    Result := -1;
+    if Station=nil then exit;
+    if not Station.ipcon.IsConnected then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletSoundIntensity then
@@ -872,11 +904,11 @@ var
   a: Integer;
   i: Integer;
 begin
-  Result := -1;
-  a := 0;
-  if Station=nil then exit;
-  if not Station.ipcon.IsConnected then exit;
   try
+    Result := -1;
+    a := 0;
+    if Station=nil then exit;
+    if not Station.ipcon.IsConnected then exit;
     for i := 0 to Station.Devices.Count-1 do
       begin
         if TDevice(Station.Devices[i]) is TBrickletSoundIntensity then
@@ -900,22 +932,28 @@ begin
 end;
 procedure ScriptCleanup;stdcall;
 begin
-  TfDisconnect;
+  try
+    TfDisconnect;
+  except
+  end;
 end;
 procedure ScriptTool;
 begin
-  if not Assigned(BrickV) then
-    begin
-      BrickV := TProcess.Create(nil);
-      BrickV.Executable:='brickv';
-      BrickV.CurrentDirectory:=GetProgramDir+'Tinkerforge'+DirectorySeparator+'Brickv';
-      BrickV.Options:=[poNoConsole];
-      try
-        BrickV.Execute;
-      except
-        FreeAndNil(BrickV);
+  try
+    if not Assigned(BrickV) then
+      begin
+        BrickV := TProcess.Create(nil);
+        BrickV.Executable:='brickv';
+        BrickV.CurrentDirectory:=GetProgramDir+'Tinkerforge'+DirectorySeparator+'Brickv';
+        BrickV.Options:=[poNoConsole];
+        try
+          BrickV.Execute;
+        except
+          FreeAndNil(BrickV);
+        end;
       end;
-    end;
+  except
+  end;
 end;
 function ScriptDefinition : PChar;stdcall;
 begin
