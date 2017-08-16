@@ -564,6 +564,82 @@ begin
     Result := 0;
   end;
 end;
+function TfGetMinColorById(id : Integer) : Cardinal;stdcall;
+var
+  a: Integer;
+  i: Integer;
+  r: word;
+  g: word;
+  b: word;
+  c: word;
+  rgbc: array[0..3] of Byte;
+begin
+  try
+    Result := 0;
+    a := 0;
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletColor then
+          begin
+            if a=id then
+              begin
+                TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
+                rgbc[0] := r;
+                rgbc[1] := g;
+                rgbc[2] := b;
+                rgbc[3] := c;
+                Result := dword(rgbc);
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := 0;
+  end;
+end;
+function TfGetMinColor(position : pchar) : Cardinal;stdcall;
+var
+  a: Integer;
+  i: Integer;
+  aDID: word;
+  aFWV: TVersionNumber;
+  aHWV: TVersionNumber;
+  aPosition: char;
+  aConUID: string;
+  aUid: string;
+  r: word;
+  g: word;
+  b: word;
+  c: word;
+  rgbc: array[0..3] of Byte;
+begin
+  try
+    Result := 0;
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletColor then
+          begin
+            TDevice(Station.Devices[i]).GetIdentity(aUid,aConUID,aPosition,aHWV,aFWV,aDID);
+            if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
+              begin
+                TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
+                rgbc[0] := r;
+                rgbc[1] := g;
+                rgbc[2] := b;
+                rgbc[3] := c;
+                Result := dword(rgbc);
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := 0;
+  end;
+end;
 function TfServoEnable(const servoNum: byte) : Boolean;stdcall;
 var
   i: Integer;
@@ -977,6 +1053,8 @@ begin
 
        +#10+'function TfGetColor(Position : pchar) : Cardinal;stdcall;'
        +#10+'function TfGetColorById(id : Integer) : Cardinal;stdcall;'
+       +#10+'function TfGetMinColor(Position : pchar) : Cardinal;stdcall;'
+       +#10+'function TfGetMinColorById(id : Integer) : Cardinal;stdcall;'
 
        +#10+'function TfSetRelais(Position : pchar;Relais : Integer;SwitchOn : Boolean) : Boolean;stdcall;'
 
@@ -1023,6 +1101,8 @@ exports
 
   TfGetColor,
   TfGetColorById,
+  TfGetMinColor,
+  TfGetMinColorById,
 
   TfSetRelais,
 
