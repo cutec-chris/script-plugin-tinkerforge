@@ -6,7 +6,7 @@ library tinkerforge;
 uses
   Classes,sysutils, IPConnection, Device, BrickletLCD20x4, BrickletLCD16x2,
   BrickletVoltageCurrent,BrickletIndustrialQuadRelay,BrickletDualRelay,process,
-  Utils,BrickletColor,BrickServo,BrickletIO16,BrickletSoundIntensity;
+  Utils,BrickletColor,BrickServo,BrickletIO16,BrickletSoundIntensity,Math;
 type
   TStation = class
     procedure ipconConnected(sender: TIPConnection; const connectReason: byte);
@@ -585,10 +585,10 @@ begin
             if a=id then
               begin
                 TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
-                rgbc[0] := r;
-                rgbc[1] := g;
-                rgbc[2] := b;
-                rgbc[3] := c;
+                rgbc[0] := Min(r,255);
+                rgbc[1] := Min(g,255);
+                rgbc[2] := Min(b,255);
+                rgbc[3] := c div 256;
                 Result := dword(rgbc);
                 exit;
               end;
@@ -626,10 +626,10 @@ begin
             if (lowercase(position)=lowercase(aConUID)+'.'+lowercase(aPosition)) or (lowercase(position)=lowercase(aPosition)) then
               begin
                 TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
-                rgbc[0] := r;
-                rgbc[1] := g;
-                rgbc[2] := b;
-                rgbc[3] := c;
+                rgbc[0] := Min(r,255);
+                rgbc[1] := Min(g,255);
+                rgbc[2] := Min(b,255);
+                rgbc[3] := c div 256;
                 Result := dword(rgbc);
                 exit;
               end;
