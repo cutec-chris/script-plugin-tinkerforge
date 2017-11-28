@@ -640,6 +640,41 @@ begin
     Result := 0;
   end;
 end;
+function TfGetColorPartById(id,Color : Integer) : Word;stdcall;
+var
+  a: Integer;
+  i: Integer;
+  r: word;
+  g: word;
+  b: word;
+  c: word;
+begin
+  Result := 0;
+  a := 0;
+  if Station=nil then exit;
+  try
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickletColor then
+          begin
+            if a=id then
+              begin
+                TBrickletColor(Station.Devices[i]).GetColor(r,g,b,c);
+                case Color of
+                0:Result := r;
+                1:Result := g;
+                2:Result := b;
+                3:Result := c;
+                end;
+                exit;
+              end;
+            inc(a);
+          end;
+      end;
+  except
+    Result := 0;
+  end;
+end;
 function TfServoEnable(const servoNum: byte) : Boolean;stdcall;
 var
   i: Integer;
@@ -1055,6 +1090,7 @@ begin
        +#10+'function TfGetColorById(id : Integer) : Cardinal;stdcall;'
        +#10+'function TfGetMinColor(Position : pchar) : Cardinal;stdcall;'
        +#10+'function TfGetMinColorById(id : Integer) : Cardinal;stdcall;'
+       +#10+'function TfGetColorPartById(id,Color : Integer) : Word;stdcall;'
 
        +#10+'function TfSetRelais(Position : pchar;Relais : Integer;SwitchOn : Boolean) : Boolean;stdcall;'
 
@@ -1103,6 +1139,7 @@ exports
   TfGetColorById,
   TfGetMinColor,
   TfGetMinColorById,
+  TfGetColorPartById,
 
   TfSetRelais,
 
