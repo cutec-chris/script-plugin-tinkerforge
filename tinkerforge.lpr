@@ -6,7 +6,7 @@ library tinkerforge;
 uses
   Classes,sysutils, IPConnection, Device, BrickletLCD20x4, BrickletLCD16x2,
   BrickletVoltageCurrent,BrickletIndustrialQuadRelay,BrickletDualRelay,process,
-  Utils,BrickletColor,BrickServo,BrickletIO16,BrickletSoundIntensity,Math;
+  Utils,BrickletColor,BrickServo,BrickletIO16,BrickletSoundIntensity,Math,BrickMaster;
 type
   TStation = class
     procedure ipconConnected(sender: TIPConnection; const connectReason: byte);
@@ -87,6 +87,10 @@ begin
         Dev := TBrickServo.Create(UID, ipcon);
         Devices.Add(Dev);
       end;
+      if (deviceIdentifier = BRICK_MASTER_DEVICE_IDENTIFIER) then begin
+        Dev := TBrickMaster.Create(UID, ipcon);
+        Devices.Add(Dev);
+      end;
       if (deviceIdentifier = BRICKLET_IO16_DEVICE_IDENTIFIER) then begin
         Dev := TBrickletIO16.Create(UID, ipcon);
         Devices.Add(Dev);
@@ -128,6 +132,26 @@ begin
     Station.Conn.Enumerate;
     result := Station.Conn.IsConnected;
     sleep(20);
+  except
+    Result := False;
+  end;
+end;
+function TfReset : Boolean;stdcall;
+var
+  i: Integer;
+begin
+  try
+    Result := False;
+    if Station=nil then exit;
+    for i := 0 to Station.Devices.Count-1 do
+      begin
+        if TDevice(Station.Devices[i]) is TBrickMaster then
+          begin
+            TBrickMaster(Station.Devices[i]).Reset;
+            Result := True;
+            exit;
+          end;
+      end;
   except
     Result := False;
   end;
@@ -1070,6 +1094,7 @@ function ScriptDefinition : PChar;stdcall;
 begin
   Result := 'function TfEnumerate : Integer;stdcall;'
        +#10+'function TfConnect(Host : PChar;Port : Integer) : Boolean;stdcall;'
+       +#10+'function TfReset : Boolean;stdcall;'
        +#10+'function TfDisconnect : Boolean;stdcall;'
        +#10+'function TfGetDeviceList : pchar;stdcall;'
 
@@ -1119,6 +1144,7 @@ end;
 exports
   TfConnect,
   TfEnumerate,
+  TfReset,
   TfDisconnect,
   TfGetDeviceList,
 
